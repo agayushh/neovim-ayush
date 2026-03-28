@@ -224,7 +224,7 @@ function M.enable(opts)
 
   api.nvim_create_autocmd('OptionSet', {
     group = M.augroup,
-    pattern = { 'cmdheight', 'laststatus' },
+    pattern = { 'cmdheight', 'laststatus', 'messagesheight', 'more' },
     callback = function(ev)
       if ev.match == 'cmdheight' then
         check_cmdheight(vim.v.option_new)

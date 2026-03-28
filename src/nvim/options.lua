@@ -5816,6 +5816,30 @@ local options = {
       varname = 'p_mopt',
     },
     {
+      abbreviation = 'msh',
+      defaults = 5,
+      desc = [=[
+        Maximum number of lines for messages displayed in the message area.
+        Messages are shown up to 'messagesheight' lines and may overlay the
+        current buffer. The pager is never focused by default; to see overflow
+        content, use |g<|.
+
+        The user cursor position remains in whatever buffer was active when
+        the message-triggering mapping or command was invoked.
+
+        The message area disappears on any kind of user input. It is not
+        timer-based.
+
+        Set 'more' to automatically focus the pager when messages exceed
+        'messagesheight'.
+      ]=],
+      full_name = 'messagesheight',
+      scope = { 'global' },
+      short_desc = N_('maximum height of the message area'),
+      type = 'number',
+      varname = 'p_msh',
+    },
+    {
       abbreviation = 'msm',
       cb = 'did_set_mkspellmem',
       defaults = '460000,2000,500',
@@ -5976,6 +6000,12 @@ local options = {
         When on, listings pause when the whole screen is filled.  You will get
         the |more-prompt|.  When this option is off there are no pauses, the
         listing continues until finished.
+
+        In |ui2|, this option controls whether the pager is automatically
+        focused when messages overflow 'messagesheight'.  When off (the
+        recommended setting with |ui2|), overflow messages are displayed as an
+        unfocused overlay that disappears on the next keypress; use |g<| to
+        enter the pager explicitly.
       ]=],
       full_name = 'more',
       scope = { 'global' },

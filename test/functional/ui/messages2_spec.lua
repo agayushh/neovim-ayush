@@ -61,15 +61,11 @@ describe('messages2', function()
     feed([[q:echo "foo" | echo "bar\nbaz\n"->repeat(&lines)<CR>]])
     screen:expect([[
       ^                                                     |
-      {1:~                                                    }|*5
+      {1:~                                                    }|*9
       {3:                                                     }|
       foo                                                  |
       bar                                                  |
-      baz                                                  |
-      bar                                                  |
-      baz                                                  |
-      bar                                                  |
-      baz [+23]                                            |
+      baz [+27]                                            |
     ]])
     -- Any key press resizes the cmdline and updates the spill indicator.
     feed('j')
@@ -155,10 +151,10 @@ describe('messages2', function()
     command('tabonly | call nvim_echo([["foo\n"]]->repeat(&lines), 1, {})')
     screen:expect([[
       ^x                                                    |
-      {1:~                                                    }|*5
+      {1:~                                                    }|*7
       {3:                                                     }|
-      foo                                                  |*6
-      foo [+8]                                             |
+      foo                                                  |*4
+      foo [+10]                                            |
     ]])
     feed('<CR>')
     screen:expect([[
@@ -228,7 +224,8 @@ describe('messages2', function()
     screen:expect([[
       {3:                                                     }|
       ^foo                                                  |
-      foo                                                  |*10
+      foo                                                  |*3
+      {1:~                                                    }|*7
       {3:[Pager]                            1,1            Top}|
                                                            |
     ]])
@@ -359,11 +356,11 @@ describe('messages2', function()
     feed([[echo "bar\n"->repeat(&lines)<CR>]])
     screen:expect([[
       ^                                                     |
-      {1:~                                                    }|*4
+      {1:~                                                    }|*6
       {3:                                                     }|
       foo                                                  |
-      bar                                                  |*5
-      bar [+8]                                             |
+      bar                                                  |*3
+      bar [+10]                                            |
     ]])
   end)
 
@@ -444,36 +441,26 @@ describe('messages2', function()
     command('echo "foo\nbar"')
     feed(':echo "baz"<CR>')
     screen:expect([[
-      foo                                                  |
+      ^foo                                                  |
       {1:~                                                    }|*8
       {3:                                                     }|
       foo                                                  |
       bar                                                  |
-      ^baz                                                  |
+      baz                                                  |
       {16::}{15:echo} {26:"baz"}                                          |
     ]])
     -- Subsequent typed commands are appended to the pager.
     feed(':echo "typed append"<CR>')
     screen:expect([[
-      foo                                                  |
-      {1:~                                                    }|*7
-      {3:                                                     }|
-      foo                                                  |
-      bar                                                  |
-      baz                                                  |
-      ^typed append                                         |
-      {16::}{15:echo} {26:"typed append"}                                 |
+      ^foo                                                  |
+      {1:~                                                    }|*12
+      typed append                                         |
     ]])
     -- Other messages that fit 'cmdheight' are not.
     feed('n')
     screen:expect([[
-      foo                                                  |
-      {1:~                                                    }|*7
-      {3:                                                     }|
-      foo                                                  |
-      bar                                                  |
-      baz                                                  |
-      ^typed append                                         |
+      ^foo                                                  |
+      {1:~                                                    }|*12
       {9:E35: No previous regular expression}                  |
     ]])
   end)
@@ -617,12 +604,13 @@ describe('messages2', function()
     ]])
     screen:expect([[
                                                            |
-      {1:~                                                    }|*10
+      {1:~                                                    }|*9
       {3:                                                     }|
-      ^foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofo|
                                                            |
+      {1:^                                                     }|
+      {1:                                                     }|
     ]])
-    t.eq(5, n.eval('g:set').filetype) -- still fires for 'filetype'
+    t.eq(4, n.eval('g:set').filetype) -- still fires for 'filetype'
   end)
 
   it('Search highlights only apply to pager', function()
@@ -717,8 +705,7 @@ describe('messages2', function()
     end)
     screen:expect([[
       ^                                                     |
-      {1:~                                                    }|*9
-      {3:                                                     }|
+      {1:~                                                    }|*13
       {15:fooo}                                                 |
       {15:barbaz}                                               |
                                                            |
@@ -784,19 +771,14 @@ describe('messages2', function()
     end)
     screen:expect([[
       ^                                                     |
-      {1:~                                                    }|*8
-      {3:                                                     }|
-      foo                                                  |
-      bar                                                  |
-      baz                                                  |
+      {1:~                                                    }|*12
       foo                                                  |
     ]])
     api.nvim_echo({ { 'foo' } }, true, { id = 2 })
     screen:expect([[
       ^                                                     |
-      {1:~                                                    }|*9
-      {3:                                                     }|
-      foo                                                  |*3
+      {1:~                                                    }|*12
+      foo                                                  |
     ]])
     api.nvim_echo({ { 'bar\nbaz' } }, true, { id = 1 })
     screen:expect([[
@@ -969,19 +951,18 @@ describe('messages2', function()
       vim.cmd.highlight('VisualNC') -- "list_cmd" kind goes to pager
     end)
     screen:expect([[
-                                                           |
+      ^                                                     |
       {1:~                                                    }|*10
       {3:                                                     }|
-      ^VisualNC       xxx cleared                        {4:bar}|
+      VisualNC       xxx cleared                        {4:bar}|
       foo                                                  |
     ]])
     command('hi VisualNC') -- cursor moved to last message in pager
     screen:expect([[
-                                                           |
-      {1:~                                                    }|*9
+      ^                                                     |
+      {1:~                                                    }|*10
       {3:                                                     }|
-      VisualNC       xxx cleared                           |
-      ^VisualNC       xxx cleared                        {4:bar}|
+      VisualNC       xxx cleared                        {4:bar}|
       foo                                                  |
     ]])
   end)

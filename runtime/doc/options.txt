@@ -4390,6 +4390,23 @@ A jump table for the options with a short description can be found at |Q_op|.
 	generated from a list of items, e.g., the Buffers menu.  Changing this
 	option has no direct effect, the menu must be refreshed first.
 
+					*'messagesheight'* *'msh'*
+'messagesheight' 'msh'	number	(default 5)
+			global
+	Maximum number of lines for messages displayed in the message area.
+	Messages are shown up to 'messagesheight' lines and may overlay the
+	current buffer. The pager is never focused by default; to see overflow
+	content, use |g<|.
+
+	The user cursor position remains in whatever buffer was active when
+	the message-triggering mapping or command was invoked.
+
+	The message area disappears on any kind of user input. It is not
+	timer-based.
+
+	Set 'more' to automatically focus the pager when messages exceed
+	'messagesheight'.
+
 						*'messagesopt'* *'mopt'*
 'messagesopt' 'mopt'	string	(default "hit-enter,history:500,progress:c")
 			global

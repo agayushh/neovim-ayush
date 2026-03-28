@@ -4445,6 +4445,27 @@ vim.o.mis = vim.o.menuitems
 vim.go.menuitems = vim.o.menuitems
 vim.go.mis = vim.go.menuitems
 
+--- Maximum number of lines for messages displayed in the message area.
+--- Messages are shown up to 'messagesheight' lines and may overlay the
+--- current buffer. The pager is never focused by default; to see overflow
+--- content, use `g<`.
+---
+--- The user cursor position remains in whatever buffer was active when
+--- the message-triggering mapping or command was invoked.
+---
+--- The message area disappears on any kind of user input. It is not
+--- timer-based.
+---
+--- Set 'more' to automatically focus the pager when messages exceed
+--- 'messagesheight'.
+---
+--- @type integer
+vim.o.messagesheight = 5
+vim.o.msh = vim.o.messagesheight
+vim.go.messagesheight = vim.o.messagesheight
+vim.go.msh = vim.go.messagesheight
+
+
 --- Option settings for outputting messages.  It can consist of the
 --- following items.  Items must be separated by a comma.
 ---
@@ -4601,6 +4622,12 @@ vim.bo.mod = vim.bo.modified
 --- When on, listings pause when the whole screen is filled.  You will get
 --- the `more-prompt`.  When this option is off there are no pauses, the
 --- listing continues until finished.
+---
+--- In `ui2`, this option controls whether the pager is automatically
+--- focused when messages overflow 'messagesheight'.  When off (the
+--- recommended setting with `ui2`), overflow messages are displayed as an
+--- unfocused overlay that disappears on the next keypress; use `g<` to
+--- enter the pager explicitly.
 ---
 --- @type boolean
 vim.o.more = true
