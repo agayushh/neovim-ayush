@@ -189,6 +189,7 @@ local options_list = {
     header = N_ 'messages and info',
     { 'shortmess', N_ 'list of flags to make messages shorter' },
     { 'messagesopt', N_ 'options for outputting messages' },
+    { 'messagesheight', N_ 'maximum height of the message area' },
     { 'showcmd', N_ "show (partial) command keys in location given by 'showcmdloc'" },
     { 'showcmdloc', N_ "location where to show the (partial) command keys for 'showcmd'" },
     { 'showmode', N_ 'display the current mode in the status line' },

@@ -5821,17 +5821,19 @@ local options = {
       desc = [=[
         Maximum number of lines for messages displayed in the message area.
         Messages are shown up to 'messagesheight' lines and may overlay the
-        current buffer. The pager is never focused by default; to see overflow
-        content, use |g<|.
+        current buffer.
+
+        When 'more' is off, the pager is not focused automatically; to see
+        overflow content, use |g<|.
+
+        When 'more' is on (the default), and messages exceed 'messagesheight',
+        the pager is focused automatically.
 
         The user cursor position remains in whatever buffer was active when
         the message-triggering mapping or command was invoked.
 
         The message area disappears on any kind of user input. It is not
         timer-based.
-
-        Set 'more' to automatically focus the pager when messages exceed
-        'messagesheight'.
       ]=],
       full_name = 'messagesheight',
       scope = { 'global' },

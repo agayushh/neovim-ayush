@@ -966,4 +966,54 @@ describe('messages2', function()
       foo                                                  |
     ]])
   end)
+
+  it("'messagesheight' limits message area height", function()
+    -- Set a small messagesheight and route messages to the msg window.
+    exec_lua(function()
+      require('vim._core.ui2').enable({
+        msg = { target = 'msg', msg = { timeout = 10000 } },
+      })
+      vim.o.messagesheight = 2
+      vim.o.more = false -- unfocused overlay mode for overflow
+    end)
+
+    -- A message within the limit (1 line) is shown in the msg area.
+    command('echo "short"')
+    screen:expect({ any = 'short' })
+
+    -- A message exceeding messagesheight=2 should overflow to the pager as an
+    -- unfocused overlay (since 'more' is off); cursor stays in original window.
+    command('echo "line1\\nline2\\nline3"')
+    screen:expect({ any = 'line1' })
+    -- Cursor must still be in the original (non-pager) window.
+    screen:expect({ any = '%^' })
+    assert(
+      exec_lua(function()
+        return vim.api.nvim_get_current_win() ~= require('vim._core.ui2').wins.pager
+      end),
+      'cursor should not be in pager with more=false'
+    )
+
+    -- Any keypress dismisses the unfocused pager overlay.
+    feed('<Esc>')
+    screen:expect({
+      condition = function()
+        screen:sleep(50)
+      end,
+    })
+
+    -- With 'more' on, overflow should focus the pager automatically.
+    exec_lua(function()
+      vim.o.more = true
+    end)
+    command('echo "a\\nb\\nc"')
+    -- Pager is focused: cursor moves into it (shown by ^).
+    screen:expect({ any = 'a\n' })
+    assert(
+      exec_lua(function()
+        return vim.api.nvim_get_current_win() == require('vim._core.ui2').wins.pager
+      end),
+      'cursor should be in pager with more=true'
+    )
+  end)
 end)

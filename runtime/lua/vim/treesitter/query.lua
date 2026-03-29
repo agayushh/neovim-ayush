@@ -653,10 +653,14 @@ local directive_handlers = {
     end
 
     metadata[capture_id].offset = {
-      pred[3] --[[@as integer]] or 0,
-      pred[4] --[[@as integer]] or 0,
-      pred[5] --[[@as integer]] or 0,
-      pred[6] --[[@as integer]] or 0,
+      pred[3] --[[@as integer]]
+        or 0,
+      pred[4] --[[@as integer]]
+        or 0,
+      pred[5] --[[@as integer]]
+        or 0,
+      pred[6] --[[@as integer]]
+        or 0,
     }
   end,
   -- Transform the content of the node

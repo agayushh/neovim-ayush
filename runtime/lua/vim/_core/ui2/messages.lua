@@ -537,6 +537,8 @@ local cmd_on_key = function(_, typed)
   -- Show or clear the message depending on if the pager was opened.
   if entered then
     api.nvim_command('norm! g<')
+    -- Consume the key used to enter the pager so it is not processed twice.
+    return ''
   end
   set_virttext('msg')
 end
@@ -592,7 +594,7 @@ local function win_row_height(tgt, min)
   cfgmin = cfgmin > 1 and cfgmin or math.ceil(o.lines * cfgmin)
   -- For msg and cmd (expanded) targets, respect the 'messagesheight' option.
   if tgt == 'msg' or tgt == 'cmd' then
-    cfgmin = math.min(cfgmin, o.messagesheight)
+    cfgmin = math.min(cfgmin, math.max(1, o.messagesheight))
   end
   if tgt ~= 'pager' then
     return (tgt == 'msg' and 0 or 1) - ui.cmd.wmnumode, math.min(min, cfgmin)
@@ -692,7 +694,7 @@ function M.set_pos(tgt, focus)
             enter_pager()
           else
             -- 'more' is off: show pager as unfocused overlay, dismissed on next keypress.
-            M.pager_on_key = vim.on_key(pager_on_key_fn, M.pager_on_key or ui.ns)
+            M.pager_on_key = vim.on_key(pager_on_key_fn, M.pager_on_key)
           end
         end
       end
